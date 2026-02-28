@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>most advanced calculator · graph</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #17212b 0%, #1c2638 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 16px;
+        }
+        .graph-card {
+            background: rgba(16, 22, 36, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid #57b6ff55;
+            border-radius: 48px;
+            box-shadow: 0 30px 60px #000000cc, 0 0 0 2px #2e5490 inset, 0 0 35px #2f8bff;
+            padding: 28px 24px;
+            max-width: 800px;
+            width: 100%;
+        }
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 0 8px;
+        }
+        .nav-link {
+            color: #b6daff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            padding: 6px 20px;
+            border-radius: 60px;
+            background: rgba(26, 36, 58, 0.8);
+            border: 1px solid #427bb4;
+            backdrop-filter: blur(4px);
+            transition: 0.2s;
+            box-shadow: 0 4px 10px black;
+        }
+        .nav-link:hover {
+            background: #27639c;
+            color: white;
+            border-color: #97d0ff;
+            transform: scale(1.02);
+            box-shadow: 0 0 18px #3d94ff;
+        }
+        .nav-link.active {
+            background: #2b6bb0;
+            color: white;
+            border-color: #b1deff;
+            box-shadow: 0 0 22px #3590ff;
+        }
+        h2 {
+            color: #e0f0ff;
+            text-align: center;
+            font-weight: 350;
+            letter-spacing: 2px;
+            text-shadow: 0 0 12px #60a0ff;
+        }
+        .function-panel {
+            background: #0e1628;
+            border-radius: 60px;
+            padding: 22px 22px;
+            border: 2px solid #356bb2;
+            margin: 20px 0 25px;
+            box-shadow: inset 0 4px 15px black;
+        }
+        .input-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+        }
+        .input-row label {
+            color: #aac9ff;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        .input-row input {
+            background: #03050b;
+            border: 2px solid #2e5299;
+            border-radius: 60px;
+            padding: 14px 20px;
+            color: #d6eeff;
+            font-size: 1.3rem;
+            font-family: 'Courier New', monospace;
+            outline: none;
+            flex: 2 1 250px;
+            box-shadow: inset 0 4px 8px black;
+        }
+        .input-row button {
+            background: #1e4480;
+            border: none;
+            border-radius: 60px;
+            padding: 16px 32px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 8px 0 #0a1930, 0 8px 20px black;
+            cursor: pointer;
+            transition: 0.07s;
+            border: 1px solid #6eabff;
+            flex: 0 1 auto;
+        }
+        .input-row button:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #0a1930, 0 8px 20px black;
+        }
+        .range-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0 10px;
+        }
+        .range-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #0c1122;
+            padding: 10px 18px;
+            border-radius: 40px;
+            border: 1px solid #3b68b0;
+        }
+        .range-item label {
+            color: #b5d2ff;
+        }
+        .range-item input {
+            width: 100px;
+            background: #01030a;
+            border: 2px solid #2d5096;
+            border-radius: 40px;
+            padding: 10px 12px;
+            color: #e1f0ff;
+            font-size: 1.2rem;
+            text-align: center;
+            font-family: monospace;
+        }
+        .canvas-wrapper {
+            background: #050915;
+            border-radius: 40px;
+            padding: 15px;
+            border: 3px solid #3260aa;
+            box-shadow: 0 0 30px #0044aa80;
+            margin-top: 20px;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            background: #0d1424;
+            border-radius: 28px;
+            border: 1px solid #2560b0;
+        }
+        .footer-note {
+            color: #7fa1d4;
+            margin-top: 24px;
+            text-align: center;
+            font-size: 1rem;
+            border-top: 1px dashed #3f66a4;
+            padding-top: 16px;
+        }
+        .sample-btn {
+            background: transparent;
+            border: 2px solid #577fd0;
+            color: #c2daff;
+            border-radius: 30px;
+            padding: 6px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="graph-card">
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">⟐ normal</a>
+            <a href="com.html" class="nav-link">⇄ compare</a>
+            <a href="grp.html" class="nav-link active">⬟ graph</a>
+        </div>
+        <h2>📈 2D FUNCTION GRAPHER · ADVANCED</h2>
+        <div class="function-panel">
+            <div class="input-row">
+                <label>f(x) =</label>
+                <input type="text" id="funcInput" value="Math.sin(x)" placeholder="e.g. Math.sin(x), x**2 + 2*x - 3">
+                <button onclick="plotFunction()">PLOT ⚡</button>
+            </div>
+            <div class="range-row">
+                <div class="range-item">
+                    <label>x min</label>
+                    <input type="number" id="xMin" value="-6" step="0.1">
+                </div>
+                <div class="range-item">
+                    <label>x max</label>
+                    <input type="number" id="xMax" value="6" step="0.1">
+                </div>
+                <div class="range-item">
+                    <label>y min</label>
+                    <input type="number" id="yMin" value="-2" step="0.1">
+                </div>
+                <div class="range-item">
+                    <label>y max</label>
+                    <input type="number" id="yMax" value="2" step="0.1">
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 12px;">
+                <span class="sample-btn" onclick="sampleSin()">📉 sin(x)</span>
+                <span class="sample-btn" onclick="sampleQuad()">📈 x²</span>
+                <span class="sample-btn" onclick="sampleExp()">📊 exp(x)</span>
+            </div>
+        </div>
+
+        <div class="canvas-wrapper">
+            <canvas id="graphCanvas" width="700" height="400"></canvas>
+        </div>
+        <div class="footer-note">
+            ⚡ use Math.* syntax · dynamic grid & axes
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('graphCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+
+        function safeFunction(expr) {
+            try {
+                return new Function('x', 'return ' + expr);
+            } catch {
+                return null;
+            }
+        }
+
+        function plotFunction() {
+            const expr = document.getElementById('funcInput').value.trim();
+            const fn = safeFunction(expr);
+            if (!fn) {
+                alert('invalid function expression');
+                return;
+            }
+
+            let xMin = parseFloat(document.getElementById('xMin').value);
+            let xMax = parseFloat(document.getElementById('xMax').value);
+            let yMin = parseFloat(document.getElementById('yMin').value);
+            let yMax = parseFloat(document.getElementById('yMax').value);
+
+            if (xMin >= xMax || yMin >= yMax) {
+                alert('check min/max ranges');
+                return;
+            }
+
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            drawGridAndAxes(xMin, xMax, yMin, yMax);
+
+            // Plot function
+            const steps = width;
+            ctx.beginPath();
+            ctx.strokeStyle = '#ffcc66';
+            ctx.lineWidth = 3;
+            ctx.shadowColor = '#ffbb33';
+            ctx.shadowBlur = 12;
+
+            let firstPoint = true;
+            for (let i = 0; i <= steps; i++) {
+                const x = xMin + (i / steps) * (xMax - xMin);
+                let y;
+                try {
+                    y = fn(x);
+                } catch {
+                    y = NaN;
+                }
+
+                if (isFinite(y)) {
+                    const canvasX = ((x - xMin) / (xMax - xMin)) * width;
+                    const canvasY = height - ((y - yMin) / (yMax - yMin)) * height; // flip y
+
+                    if (canvasY >= 0 && canvasY <= height) {
+                        if (firstPoint) {
+                            ctx.moveTo(canvasX, canvasY);
+                            firstPoint = false;
+                        } else {
+                            ctx.lineTo(canvasX, canvasY);
+                        }
+                    } else {
+                        firstPoint = true; // break line if out of range
+                    }
+                } else {
+                    firstPoint = true; // break at NaN/Inf
+                }
+            }
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+        }
+
+        function drawGridAndAxes(xMin, xMax, yMin, yMax) {
+            ctx.save();
+            ctx.strokeStyle = '#3c5f9e';
+            ctx.lineWidth = 0.8;
+            ctx.shadowBlur = 3;
+            ctx.shadowColor = '#2560aa';
+
+            // grid lines (vertical)
+            const xStep = (xMax - xMin) / 10;
+            for (let i = 0; i <= 10; i++) {
+                const xVal = xMin + i * xStep;
+                const canvasX = ((xVal - xMin) / (xMax - xMin)) * width;
+                ctx.beginPath();
+                ctx.strokeStyle = '#2a4580';
+                ctx.lineWidth = (xVal === 0) ? 2 : 0.6;
+                ctx.moveTo(canvasX, 0);
+                ctx.lineTo(canvasX, height);
+                ctx.stroke();
+            }
+
+            // horizontal grid
+            const yStep = (yMax - yMin) / 10;
+            for (let i = 0; i <= 10; i++) {
+                const yVal = yMin + i * yStep;
+                const canvasY = height - ((yVal - yMin) / (yMax - yMin)) * height;
+                ctx.beginPath();
+                ctx.strokeStyle = '#2a4580';
+                ctx.lineWidth = (yVal === 0) ? 2 : 0.6;
+                ctx.moveTo(0, canvasY);
+                ctx.lineTo(width, canvasY);
+                ctx.stroke();
+            }
+
+            // draw axes with labels (simple)
+            ctx.strokeStyle = '#90c0ff';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            // x-axis
+            const zeroY = height - ((0 - yMin) / (yMax - yMin)) * height;
+            if (zeroY >= 0 && zeroY <= height) {
+                ctx.moveTo(0, zeroY);
+                ctx.lineTo(width, zeroY);
+            }
+            // y-axis
+            const zeroX = ((0 - xMin) / (xMax - xMin)) * width;
+            if (zeroX >= 0 && zeroX <= width) {
+                ctx.moveTo(zeroX, 0);
+                ctx.lineTo(zeroX, height);
+            }
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        // sample functions
+        function sampleSin() {
+            document.getElementById('funcInput').value = 'Math.sin(x)';
+            document.getElementById('xMin').value = '-6';
+            document.getElementById('xMax').value = '6';
+            document.getElementById('yMin').value = '-1.5';
+            document.getElementById('yMax').value = '1.5';
+            plotFunction();
+        }
+        function sampleQuad() {
+            document.getElementById('funcInput').value = 'x**2 - 2';
+            document.getElementById('xMin').value = '-3';
+            document.getElementById('xMax').value = '3';
+            document.getElementById('yMin').value = '-2';
+            document.getElementById('yMax').value = '5';
+            plotFunction();
+        }
+        function sampleExp() {
+            document.getElementById('funcInput').value = 'Math.exp(x/2)';
+            document.getElementById('xMin').value = '-3';
+            document.getElementById('xMax').value = '4';
+            document.getElementById('yMin').value = '0';
+            document.getElementById('yMax').value = '8';
+            plotFunction();
+        }
+
+        window.onload = function() {
+            sampleSin(); // default plot
+        };
+    </script>
+</body>
+</html>
